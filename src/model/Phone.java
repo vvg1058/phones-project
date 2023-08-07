@@ -9,6 +9,10 @@ public class Phone {
     private CellPlan cellPlan;
 
     public Phone(String imei, String number, LocalDate manufacturingDate, CellPlan cellPlan) {
+        this.imei = imei;
+        this.number = number;
+        this.manufacturingDate = manufacturingDate;
+        this.cellPlan = cellPlan;
     }
 
     public String getImei() {
