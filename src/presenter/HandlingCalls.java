@@ -2,6 +2,7 @@ package presenter;
 
 import java.time.LocalDate;
 
+import model.Phone;
 import model.ServicePhone;
 
 public class HandlingCalls {
@@ -16,7 +17,8 @@ public class HandlingCalls {
     }
 
     public String findPhone(String imei) {
-        return null;
+        Phone phoneFound = this.servicePhone.findPhone(imei);
+        return phoneFound.toString();
     }
 
     public boolean registryCall(String number, String imei, int minutes) {
