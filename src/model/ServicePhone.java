@@ -12,15 +12,51 @@ public class ServicePhone {
     }
 
     public void setPhoneOne(Phone phoneOne) {
-        this.phoneOne = phoneOne;
+        if (this.phoneOne == null) {
+            if (this.phoneTwo != null) {
+                if (this.phoneTwo.getImei().equals(phoneOne.getImei())) {
+                    throw new IllegalArgumentException("Phone already registered");
+                }
+            }
+            if (this.phoneThree != null) {
+                if (this.phoneThree.getImei().equals(phoneOne.getImei())) {
+                    throw new IllegalArgumentException("Phone already registered");
+                }
+            }
+            this.phoneOne = phoneOne;
+        }
     }
 
     public void setPhoneTwo(Phone phoneTwo) {
-        this.phoneTwo = phoneTwo;
+        if (this.phoneTwo == null) {
+            if (this.phoneOne != null) {
+                if (this.phoneOne.getImei().equals(phoneTwo.getImei())) {
+                    throw new IllegalArgumentException("Phone already registered");
+                }
+            }
+            if (this.phoneThree != null) {
+                if (this.phoneThree.getImei().equals(phoneTwo.getImei())) {
+                    throw new IllegalArgumentException("Phone already registered");
+                }
+            }
+            this.phoneTwo = phoneTwo;
+        }
     }
 
     public void setPhoneThree(Phone phoneThree) {
-        this.phoneThree = phoneThree;
+        if (this.phoneThree == null) {
+            if (this.phoneOne != null) {
+                if (this.phoneOne.getImei().equals(phoneThree.getImei())) {
+                    throw new IllegalArgumentException("Phone already registered");
+                }
+            }
+            if (this.phoneTwo != null) {
+                if (this.phoneTwo.getImei().equals(phoneThree.getImei())) {
+                    throw new IllegalArgumentException("Phone already registered");
+                }
+            }
+            this.phoneThree = phoneThree;
+        }
     }
 
     public Phone getPhoneTwo() {
