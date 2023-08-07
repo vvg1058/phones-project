@@ -36,6 +36,13 @@ public class ServicePhone {
     }
 
     public Phone findPhone(String imei) {
+        if (this.phoneOne.getImei().equals(imei)) {
+            return this.phoneOne;
+        } else if (this.phoneTwo.getImei().equals(imei)) {
+            return this.phoneTwo;
+        } else if (this.phoneThree.getImei().equals(imei)) {
+            return this.phoneThree;
+        }
         return null;
     }
 

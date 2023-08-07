@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Phone {
     private String imei;
@@ -9,6 +10,10 @@ public class Phone {
     private CellPlan cellPlan;
 
     public Phone(String imei, String number, LocalDate manufacturingDate, CellPlan cellPlan) {
+        this.imei = imei;
+        this.number = number;
+        this.manufacturingDate = manufacturingDate;
+        this.cellPlan = cellPlan;
     }
 
     public String getImei() {
@@ -52,7 +57,7 @@ public class Phone {
     public String toString() {
         return "IMEI " + imei + "" +
                 "Number " + number + "" + "Manufacturing Date " +
-                manufacturingDate + "" + "Cell plan" + cellPlan;
+                manufacturingDate.format(DateTimeFormatter.ISO_LOCAL_DATE) + "" + "Cell plan" + cellPlan;
 
     }
 
