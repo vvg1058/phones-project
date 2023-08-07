@@ -15,6 +15,7 @@ public class Runner {
         runner.scanner = new Scanner(System.in);
         runner.handlingCalls = new HandlingCalls();
         runner.addPhone();
+        runner.findPhone();
     }
 
     public void mainMenu() {
@@ -35,9 +36,13 @@ public class Runner {
         this.handlingCalls.addPhone(imei, number,
                 LocalDate.of(Integer.parseInt(date[2]), Integer.parseInt(date[1]), Integer.parseInt(date[0])),
                 description, minutes);
+        scanner.nextLine();
     }
 
     public void findPhone() {
+        System.out.println("Enter the IMEI: ");
+        String imei = scanner.nextLine();
+        System.out.println(this.handlingCalls.findPhone(imei));
     }
 
     public void addMinutes() {

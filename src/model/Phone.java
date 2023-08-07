@@ -55,10 +55,9 @@ public class Phone {
 
     @Override
     public String toString() {
-        return "IMEI " + imei + "" +
-                "Number " + number + "" + "Manufacturing Date " +
-                manufacturingDate.format(DateTimeFormatter.ISO_LOCAL_DATE) + "" + "Cell plan" + cellPlan;
-
+        return String.format(
+                "The phone with IMEI %s has the number %s, was manufactured on %s and has the following cell plan: %s. This phone has %d years old.",
+                imei, number, manufacturingDate.format(DateTimeFormatter.ISO_LOCAL_DATE), cellPlan, getAge());
     }
 
 }
