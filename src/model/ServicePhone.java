@@ -36,7 +36,7 @@ public class ServicePhone {
     }
 
     public Phone findPhone(String imei) {
-        return 0;
+        return null;
     }
 
     public int addMinutes(Phone phone) {
