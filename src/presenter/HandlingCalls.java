@@ -43,26 +43,26 @@ public class HandlingCalls {
         return phoneFound.toString();
     }
 
-    public int addMinutes(String imei, int minutes) throws NoSuchElementException {
+    public int addMinutes(String imei, int minutes) {
         Phone foundPhone = servicePhone.findPhone(imei);
 
         if (foundPhone != null) {
             CellPlan cellPlan = foundPhone.getCellPlan();
             int totalMinutes = cellPlan.getMinutes() + minutes;
             cellPlan.setMinutes(totalMinutes);
-            return totalMinutes;
+            return servicePhone.addMinutes(foundPhone);
         } else {
-            throw new NoSuchElementException("Phone with IMEI " + imei + " not found or does not exist.");
+            return 0;
         }
     }
 
-    public boolean registryCall(String imei, String typeCall, int minutes) throws NoSuchElementException {
+    public boolean registryCall(String imei, String typeCall, int minutes) {
         Phone foundPhone = servicePhone.findPhone(imei);
         if (foundPhone != null) {
             ETypeCall eTypeCall = ETypeCall.valueOf(typeCall);
             return servicePhone.registryCall(foundPhone, minutes, eTypeCall);
         } else {
-            throw new NoSuchElementException("Phone with IMEI " + imei + " not found or does not exist.");
+            return false;
         }
     }
 }

@@ -107,13 +107,6 @@ public class ServicePhone {
     }
 
     public int addMinutes(Phone phone) {
-        Phone foundPhone = findPhone(phone.getImei());
-
-        if (foundPhone != null) {
-            int addMinutes = phone.getCellPlan().getMinutes();
-            return addMinutes;
-        } else {
-            return 0;
-        }
+        return phone.getCellPlan().getMinutes();
     }
 }
