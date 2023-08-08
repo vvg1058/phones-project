@@ -57,11 +57,18 @@ public class HandlingCalls {
         }
     }
 
-    public boolean registryCall(String imei, String typeCall, int minutes) {
+    public boolean registryCall(String imei, String numberToCall, int minutes) {
         Phone foundPhone = servicePhone.findPhone(imei);
         if (foundPhone != null) {
-            ETypeCall eTypeCall = ETypeCall.valueOf(typeCall);
-            return servicePhone.registryCall(foundPhone, minutes, eTypeCall);
+            if (numberToCall.charAt(0) == "+".charAt(0) && !numberToCall.substring(0, 3).equals("+57")) {
+                return servicePhone.registryCall(foundPhone, minutes, ETypeCall.INTERNATIONAL);
+            } else if (numberToCall.charAt(0) == "6".charAt(0)) {
+                return servicePhone.registryCall(foundPhone, minutes, ETypeCall.FIXED);
+            } else if (numberToCall.charAt(0) == "3".charAt(0)) {
+                return servicePhone.registryCall(foundPhone, minutes, ETypeCall.MOVIL);
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
