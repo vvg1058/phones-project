@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import model.Phone;
 import model.CellPlan;
+import model.ETypeCall;
 import model.ServicePhone;
 
 public class HandlingCalls {
@@ -16,6 +17,9 @@ public class HandlingCalls {
 
     public boolean addPhone(String imei, String number, LocalDate manufacturingDate, String description, int minutes) {
         try {
+            if (servicePhone.findPhone(imei) != null) {
+                return false;
+            }
             Phone phone = new Phone(imei, number, manufacturingDate, new CellPlan(description, minutes));
             if (servicePhone.getPhoneOne() == null) {
                 servicePhone.setPhoneOne(phone);
@@ -40,8 +44,26 @@ public class HandlingCalls {
         return phoneFound.toString();
     }
 
-    public boolean registryCall(String number, String imei, int minutes) {
-        return false;
+    public int addMinutes(String imei, int minutes) {
+        Phone foundPhone = servicePhone.findPhone(imei);
+
+        if (foundPhone != null) {
+            CellPlan cellPlan = foundPhone.getCellPlan();
+            int totalMinutes = cellPlan.getMinutes() + minutes;
+            cellPlan.setMinutes(totalMinutes);
+            return servicePhone.addMinutes(foundPhone);
+        } else {
+            return 0;
+        }
     }
 
+    public boolean registryCall(String imei, String typeCall, int minutes) {
+        Phone foundPhone = servicePhone.findPhone(imei);
+        if (foundPhone != null) {
+            ETypeCall eTypeCall = ETypeCall.valueOf(typeCall);
+            return servicePhone.registryCall(foundPhone, minutes, eTypeCall);
+        } else {
+            return false;
+        }
+    }
 }
