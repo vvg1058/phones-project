@@ -1,8 +1,6 @@
 package presenter;
 
-import java.nio.file.ProviderNotFoundException;
 import java.time.LocalDate;
-import java.util.NoSuchElementException;
 
 import model.Phone;
 import model.CellPlan;
@@ -19,6 +17,9 @@ public class HandlingCalls {
 
     public boolean addPhone(String imei, String number, LocalDate manufacturingDate, String description, int minutes) {
         try {
+            if (servicePhone.findPhone(imei) != null) {
+                return false;
+            }
             Phone phone = new Phone(imei, number, manufacturingDate, new CellPlan(description, minutes));
             if (servicePhone.getPhoneOne() == null) {
                 servicePhone.setPhoneOne(phone);
