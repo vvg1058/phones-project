@@ -50,7 +50,7 @@ public class Phone {
     }
 
     public int getAge() {
-        return 0;
+        return Math.abs(manufacturingDate.getYear() - LocalDate.now().getYear());
     }
 
     @Override
