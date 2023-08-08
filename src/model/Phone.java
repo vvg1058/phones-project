@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Phone {
     private String imei;
@@ -9,6 +10,10 @@ public class Phone {
     private CellPlan cellPlan;
 
     public Phone(String imei, String number, LocalDate manufacturingDate, CellPlan cellPlan) {
+        this.imei = imei;
+        this.number = number;
+        this.manufacturingDate = manufacturingDate;
+        this.cellPlan = cellPlan;
     }
 
     public String getImei() {
@@ -45,15 +50,14 @@ public class Phone {
     }
 
     public int getAge() {
-        return 0;
+        return Math.abs(manufacturingDate.getYear() - LocalDate.now().getYear());
     }
 
     @Override
     public String toString() {
-        return "IMEI " + imei + "" +
-                "Number " + number + "" + "Manufacturing Date " +
-                manufacturingDate + "" + "Cell plan" + cellPlan;
-
+        return String.format(
+                "The phone with IMEI %s has the number %s, was manufactured on %s and has the following cell plan: %s. This phone has %d years old.",
+                imei, number, manufacturingDate.format(DateTimeFormatter.ISO_LOCAL_DATE), cellPlan, getAge());
     }
 
 }

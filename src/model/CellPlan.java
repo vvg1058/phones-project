@@ -30,9 +30,7 @@ public class CellPlan {
 
     @Override
     public String toString() {
-        return "Description " + description + ""
-                + "Minutes " + minutes + "";
-
+        return String.format("Description: %s, Minutes: %d", description, minutes);
     }
 
 }
