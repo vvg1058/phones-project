@@ -67,4 +67,28 @@ public class HandlingCallsTest {
             assertEquals("Phone with IMEI 123456789012343 not found or does not exist.", e.getMessage());
         }
     }
+
+    @Test
+    public void testAddMinutes() {
+        try {
+            HandlingCalls handlingCalls = new HandlingCalls();
+            handlingCalls.addPhone("123456789012345", "1234567890", LocalDate.now(), "description", 10);
+            int totalMinutes = handlingCalls.addMinutes("123456789012345", 10);
+            assertEquals(20, totalMinutes);
+        } catch (NoSuchElementException e) {
+            fail("Unexpected exception");
+        }
+    }
+
+    @Test
+    public void testAddMinutesFail() {
+        try {
+            HandlingCalls handlingCalls = new HandlingCalls();
+            handlingCalls.addPhone("123456789012345", "1234567890", LocalDate.now(), "description", 10);
+            handlingCalls.addMinutes("123456789012343", 10);
+            fail("Expected exception");
+        } catch (NoSuchElementException e) {
+            assertEquals("Phone with IMEI 123456789012343 not found or does not exist.", e.getMessage());
+        }
+    }
 }
