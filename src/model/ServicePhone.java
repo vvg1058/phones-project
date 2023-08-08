@@ -5,7 +5,6 @@ public class ServicePhone {
     private Phone phoneOne;
     private Phone phoneTwo;
     private Phone phoneThree;
-    private ETypeCall eTypeCall;
 
     public Phone getPhoneOne() {
         return phoneOne;
@@ -68,31 +67,28 @@ public class ServicePhone {
     }
 
     public boolean registryCall(Phone phone, int minutes, ETypeCall eTypeCall) {
-        Phone foundPhone = findPhone(phone.getImei());
+        int minutesToDeduct;
 
-        if (foundPhone != null) {
-            int minutesToDeduct;
+        switch (eTypeCall) {
+            case MOVIL:
+                minutesToDeduct = 1;
+                break;
+            case FIXED:
+                minutesToDeduct = 2;
+                break;
+            case INTERNATIONAL:
+                minutesToDeduct = 3;
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid call type: " + eTypeCall);
+        }
+        minutesToDeduct = minutes * minutesToDeduct;
 
-            switch (eTypeCall) {
-                case MOVIL:
-                    minutesToDeduct = 1;
-                    break;
-                case FIXED:
-                    minutesToDeduct = 2;
-                    break;
-                case INTERNATIONAL:
-                    minutesToDeduct = 3;
-                    break;
-                default:
-                    throw new IllegalArgumentException("Invalid call type: " + eTypeCall);
-            }
+        CellPlan cellPlan = phone.getCellPlan();
 
-            CellPlan cellPlan = foundPhone.getCellPlan();
-
-            if (cellPlan.getMinutes() >= minutesToDeduct) {
-                cellPlan.setMinutes(cellPlan.getMinutes() - minutesToDeduct);
-                return true;
-            }
+        if (cellPlan.getMinutes() >= minutesToDeduct) {
+            cellPlan.setMinutes(cellPlan.getMinutes() - minutesToDeduct);
+            return true;
         }
 
         return false;
@@ -100,11 +96,11 @@ public class ServicePhone {
     }
 
     public Phone findPhone(String imei) {
-        if (this.phoneOne.getImei().equals(imei)) {
+        if (this.phoneOne != null && this.phoneOne.getImei().equals(imei)) {
             return this.phoneOne;
-        } else if (this.phoneTwo.getImei().equals(imei)) {
+        } else if (this.phoneTwo != null && this.phoneTwo.getImei().equals(imei)) {
             return this.phoneTwo;
-        } else if (this.phoneThree.getImei().equals(imei)) {
+        } else if (this.phoneThree != null && this.phoneThree.getImei().equals(imei)) {
             return this.phoneThree;
         }
         return null;

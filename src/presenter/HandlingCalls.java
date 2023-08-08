@@ -56,35 +56,11 @@ public class HandlingCalls {
         }
     }
 
-    public boolean registryCall(String imei, ETypeCall callType)
-            throws NoSuchElementException, IllegalArgumentException {
+    public boolean registryCall(String imei, String typeCall, int minutes) throws NoSuchElementException {
         Phone foundPhone = servicePhone.findPhone(imei);
-
         if (foundPhone != null) {
-            int minutesToDeduct;
-
-            switch (callType) {
-                case MOVIL:
-                    minutesToDeduct = 1;
-                    break;
-                case FIXED:
-                    minutesToDeduct = 2;
-                    break;
-                case INTERNATIONAL:
-                    minutesToDeduct = 3;
-                    break;
-                default:
-                    throw new IllegalArgumentException("Invalid call type: " + callType);
-            }
-
-            CellPlan cellPlan = foundPhone.getCellPlan();
-
-            if (cellPlan.getMinutes() >= minutesToDeduct) {
-                cellPlan.setMinutes(cellPlan.getMinutes() - minutesToDeduct);
-                return true;
-            } else {
-                return false;
-            }
+            ETypeCall eTypeCall = ETypeCall.valueOf(typeCall);
+            return servicePhone.registryCall(foundPhone, minutes, eTypeCall);
         } else {
             throw new NoSuchElementException("Phone with IMEI " + imei + " not found or does not exist.");
         }
