@@ -1,9 +1,12 @@
 package presenter;
 
+import java.nio.file.ProviderNotFoundException;
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
 
 import model.Phone;
 import model.CellPlan;
+import model.ETypeCall;
 import model.ServicePhone;
 
 public class HandlingCalls {
@@ -40,8 +43,50 @@ public class HandlingCalls {
         return phoneFound.toString();
     }
 
-    public boolean registryCall(String number, String imei, int minutes) {
-        return false;
+    public int addMinutes(String imei, int minutes) throws NoSuchElementException {
+        Phone foundPhone = servicePhone.findPhone(imei);
+
+        if (foundPhone != null) {
+            CellPlan cellPlan = foundPhone.getCellPlan();
+            int totalMinutes = cellPlan.getMinutes() + minutes;
+            cellPlan.setMinutes(totalMinutes);
+            return totalMinutes;
+        } else {
+            throw new NoSuchElementException("Phone with IMEI " + imei + " not found or does not exist.");
+        }
     }
 
+    public boolean registryCall(String imei, ETypeCall callType)
+            throws NoSuchElementException, IllegalArgumentException {
+        Phone foundPhone = servicePhone.findPhone(imei);
+
+        if (foundPhone != null) {
+            int minutesToDeduct;
+
+            switch (callType) {
+                case MOVIL:
+                    minutesToDeduct = 1;
+                    break;
+                case FIXED:
+                    minutesToDeduct = 2;
+                    break;
+                case INTERNATIONAL:
+                    minutesToDeduct = 3;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid call type: " + callType);
+            }
+
+            CellPlan cellPlan = foundPhone.getCellPlan();
+
+            if (cellPlan.getMinutes() >= minutesToDeduct) {
+                cellPlan.setMinutes(cellPlan.getMinutes() - minutesToDeduct);
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            throw new NoSuchElementException("Phone with IMEI " + imei + " not found or does not exist.");
+        }
+    }
 }

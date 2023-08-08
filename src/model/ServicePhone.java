@@ -68,7 +68,35 @@ public class ServicePhone {
     }
 
     public boolean registryCall(Phone phone, int minutes, ETypeCall eTypeCall) {
+        Phone foundPhone = findPhone(phone.getImei());
+
+        if (foundPhone != null) {
+            int minutesToDeduct;
+
+            switch (eTypeCall) {
+                case MOVIL:
+                    minutesToDeduct = 1;
+                    break;
+                case FIXED:
+                    minutesToDeduct = 2;
+                    break;
+                case INTERNATIONAL:
+                    minutesToDeduct = 3;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid call type: " + eTypeCall);
+            }
+
+            CellPlan cellPlan = foundPhone.getCellPlan();
+
+            if (cellPlan.getMinutes() >= minutesToDeduct) {
+                cellPlan.setMinutes(cellPlan.getMinutes() - minutesToDeduct);
+                return true;
+            }
+        }
+
         return false;
+
     }
 
     public Phone findPhone(String imei) {
@@ -83,8 +111,13 @@ public class ServicePhone {
     }
 
     public int addMinutes(Phone phone) {
-        return 0;
+        Phone foundPhone = findPhone(phone.getImei());
 
+        if (foundPhone != null) {
+            int addMinutes = phone.getCellPlan().getMinutes();
+            return addMinutes;
+        } else {
+            return 0;
+        }
     }
-
 }
