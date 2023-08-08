@@ -1,14 +1,26 @@
 package presenter;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
 
 import org.junit.Test;
+import org.junit.Before;
 
 import model.ServicePhone;
 
 public class HandlingCallsTest {
+    @Before
+    public void cleanUp() {
+        ServicePhone servicePhone = new ServicePhone();
+        servicePhone.setPhoneOne(null);
+        servicePhone.setPhoneTwo(null);
+        servicePhone.setPhoneThree(null);
+    }
+
     @Test
     public void testAddPhone() {
         HandlingCalls handlingCalls = new HandlingCalls();
@@ -22,5 +34,37 @@ public class HandlingCallsTest {
         assertTrue("Phone added", phoneTwo);
         assertTrue("Phone added", phoneThree);
         assertTrue("Phone not added", !phoneFail);
+    }
+
+    @Test
+    public void testFindPhone() {
+        HandlingCalls handlingCalls = new HandlingCalls();
+        handlingCalls.addPhone("123456789012345", "1234567890", LocalDate.now(), "description", 10);
+        String phoneFound = handlingCalls.findPhone("123456789012345");
+        assertTrue("Phone found", phoneFound != null);
+    }
+
+    @Test
+    public void testRegistryCall() {
+        try {
+            HandlingCalls handlingCalls = new HandlingCalls();
+            handlingCalls.addPhone("123456789012345", "1234567890", LocalDate.now(), "description", 10);
+            boolean callRegistered = handlingCalls.registryCall("123456789012345", "MOVIL", 10);
+            assertTrue("Call registered", callRegistered);
+        } catch (NoSuchElementException e) {
+            fail("Unexpected exception");
+        }
+    }
+
+    @Test
+    public void testRegistryCallFailed() {
+        try {
+            HandlingCalls handlingCalls = new HandlingCalls();
+            handlingCalls.addPhone("123456789012345", "1234567890", LocalDate.now(), "description", 10);
+            handlingCalls.registryCall("123456789012343", "MOVIL", 10);
+            fail("Expected exception");
+        } catch (NoSuchElementException e) {
+            assertEquals("Phone with IMEI 123456789012343 not found or does not exist.", e.getMessage());
+        }
     }
 }
