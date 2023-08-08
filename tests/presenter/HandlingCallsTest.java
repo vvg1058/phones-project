@@ -1,6 +1,7 @@
 package presenter;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -46,49 +47,33 @@ public class HandlingCallsTest {
 
     @Test
     public void testRegistryCall() {
-        try {
-            HandlingCalls handlingCalls = new HandlingCalls();
-            handlingCalls.addPhone("123456789012345", "1234567890", LocalDate.now(), "description", 10);
-            boolean callRegistered = handlingCalls.registryCall("123456789012345", "MOVIL", 10);
-            assertTrue("Call registered", callRegistered);
-        } catch (NoSuchElementException e) {
-            fail("Unexpected exception");
-        }
+        HandlingCalls handlingCalls = new HandlingCalls();
+        handlingCalls.addPhone("123456789012345", "1234567890", LocalDate.now(), "description", 10);
+        boolean callRegistered = handlingCalls.registryCall("123456789012345", "MOVIL", 10);
+        assertTrue("Call registered", callRegistered);
     }
 
     @Test
     public void testRegistryCallFailed() {
-        try {
-            HandlingCalls handlingCalls = new HandlingCalls();
-            handlingCalls.addPhone("123456789012345", "1234567890", LocalDate.now(), "description", 10);
-            handlingCalls.registryCall("123456789012343", "MOVIL", 10);
-            fail("Expected exception");
-        } catch (NoSuchElementException e) {
-            assertEquals("Phone with IMEI 123456789012343 not found or does not exist.", e.getMessage());
-        }
+        HandlingCalls handlingCalls = new HandlingCalls();
+        handlingCalls.addPhone("123456789012345", "1234567890", LocalDate.now(), "description", 10);
+        boolean isRegistered = handlingCalls.registryCall("123456789012343", "MOVIL", 10);
+        assertFalse(isRegistered);
     }
 
     @Test
     public void testAddMinutes() {
-        try {
-            HandlingCalls handlingCalls = new HandlingCalls();
-            handlingCalls.addPhone("123456789012345", "1234567890", LocalDate.now(), "description", 10);
-            int totalMinutes = handlingCalls.addMinutes("123456789012345", 10);
-            assertEquals(20, totalMinutes);
-        } catch (NoSuchElementException e) {
-            fail("Unexpected exception");
-        }
+        HandlingCalls handlingCalls = new HandlingCalls();
+        handlingCalls.addPhone("123456789012345", "1234567890", LocalDate.now(), "description", 10);
+        int totalMinutes = handlingCalls.addMinutes("123456789012345", 10);
+        assertEquals(20, totalMinutes);
     }
 
     @Test
     public void testAddMinutesFail() {
-        try {
-            HandlingCalls handlingCalls = new HandlingCalls();
-            handlingCalls.addPhone("123456789012345", "1234567890", LocalDate.now(), "description", 10);
-            handlingCalls.addMinutes("123456789012343", 10);
-            fail("Expected exception");
-        } catch (NoSuchElementException e) {
-            assertEquals("Phone with IMEI 123456789012343 not found or does not exist.", e.getMessage());
-        }
+        HandlingCalls handlingCalls = new HandlingCalls();
+        handlingCalls.addPhone("123456789012345", "1234567890", LocalDate.now(), "description", 10);
+        int minutes = handlingCalls.addMinutes("123456789012343", 10);
+        assertEquals(0, minutes);
     }
 }
